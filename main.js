@@ -9,7 +9,7 @@ async function recognize(base64, lang, options) {
     if (!apikey) {
         throw "Gemini API Key not found. Please set it in the plugin configuration.";
     }
-
+    
     // 2. 如果用户没有选择模型，提供一个默认值
     if (!model) {
         model = "gemini-2.5-flash"; // 默认使用 Flash 模型
@@ -28,7 +28,7 @@ async function recognize(base64, lang, options) {
         "ru": "俄文",
         "de": "德文"
     };
-
+    
     // 使用我们自己定义的映射表
     const targetLanguage = langCodeToName[lang] || lang;
 
@@ -36,12 +36,12 @@ async function recognize(base64, lang, options) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apikey}`;
 
     // 5. 构建请求体 (Request Body)
-    const body = {
+    const geminiPayload = {
         contents: [
             {
                 parts: [
                     {
-                        text: `请精确识别图中的所有文字，然后将它们翻译成“${targetLanguage}”。请只返回翻译后的纯文本，不要包含任何额外的解释、标题或 Markdown 格式。`
+                        text: `请精确识别图中的所有文字，然后将它们翻译成“${targetLanguage}”。为了便于用户理解你可以提供一些说明信息，请不要输出markdown格式的文本。请注意，图像中的文字可能包含多种语言，请确保翻译准确。`
                     },
                     {
                         inline_data: {
@@ -61,8 +61,11 @@ async function recognize(base64, lang, options) {
             "Content-Type": "application/json"
         },
         // --- 错误修复部分 ---
-        // 直接传递 body 对象，不要手动 JSON.stringify()
-        body: body
+        // 按照 tauriFetch 的要求，将 body 构造成特定格式的对象
+        body: {
+            type: 'Json',       // 明确告诉 tauriFetch 我们要发送 JSON
+            payload: geminiPayload // 将我们准备好的数据作为 payload
+        }
         // --- 修复结束 ---
     });
 
