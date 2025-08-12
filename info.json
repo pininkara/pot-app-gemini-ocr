@@ -1,37 +1,44 @@
 {
-  "id": "plugin.com.pot-app.ocrspace",
+  "id": "plugin.com.pininkara.gemini_ocr",
   "plugin_type": "recognize",
   "icon": "icon.png",
-  "display": "OCR Space",
-  "homepage": "https://github.com/pot-app/pot-app-recognize-plugin-template",
+  "display": "Gemini OCR 翻译",
+  "homepage": "https://github.com/pininkara/pot-app-gemini-ocr",
   "needs": [
     {
-      "key": "engine",
-      "display": "Engine",
+      "key": "model",
+      "display": "选择模型",
       "type": "select",
-      "options": { "1": "Engine 1", "2": "Engine 2", "3": "Engine 3" }
+      "options": {
+        "gemini-2.5-flash": "Gemini 2.5 Flash",
+        "gemini-2.5-pro": "Gemini 2.5 Pro"
+      }
     },
-    { "key": "apikey", "display": "Api Key", "type": "input" }
+    {
+      "key": "apikey",
+      "display": "Gemini API Key",
+      "type": "input"
+    }
   ],
   "language": {
-    "auto": "eng",
-    "zh_cn": "chs",
-    "zh_tw": "cht",
-    "en": "eng",
-    "ja": "jpn",
-    "ko": "kor",
-    "fr": "fre",
-    "es": "spa",
-    "ru": "rus",
-    "de": "ger",
-    "it": "ita",
-    "tr": "tur",
-    "pt_pt": "por",
-    "pt_br": "por",
-    "vi": "vie",
-    "th": "tai",
-    "ar": "ara",
-    "hi": "hin",
-    "fa": "per"
+    "auto": "英文",
+    "zh_cn": "简体中文",
+    "zh_tw": "繁體中文",
+    "en": "英文",
+    "ja": "日文",
+    "ko": "韩文",
+    "fr": "法文",
+    "es": "西班牙文",
+    "ru": "俄文",
+    "de": "德文",
+    "it": "意大利文",
+    "tr": "土耳其文",
+    "pt_pt": "葡萄牙文",
+    "pt_br": "葡萄牙文",
+    "vi": "越南文",
+    "th": "泰文",
+    "ar": "阿拉伯文",
+    "hi": "印地文",
+    "fa": "波斯文"
   }
 }
