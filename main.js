@@ -17,7 +17,7 @@ async function recognize(base64, lang, options) {
 
     // 3. 在函数内部创建一个简单的语言代码 -> 名称映射表
     const langCodeToName = {
-        "auto": "英文",
+        "auto": "简体中文",
         "zh_cn": "简体中文",
         "zh_tw": "繁體中文",
         "en": "英文",
