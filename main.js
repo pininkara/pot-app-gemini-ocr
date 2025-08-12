@@ -9,14 +9,13 @@ async function recognize(base64, lang, options) {
     if (!apikey) {
         throw "Gemini API Key not found. Please set it in the plugin configuration.";
     }
-    
+
     // 2. 如果用户没有选择模型，提供一个默认值
     if (!model) {
         model = "gemini-2.5-flash"; // 默认使用 Flash 模型
     }
 
-    // --- 错误修复部分 ---
-    // 在函数内部创建一个简单的语言代码 -> 名称映射表
+    // 3. 在函数内部创建一个简单的语言代码 -> 名称映射表
     const langCodeToName = {
         "auto": "英文",
         "zh_cn": "简体中文",
@@ -29,10 +28,9 @@ async function recognize(base64, lang, options) {
         "ru": "俄文",
         "de": "德文"
     };
-    
-    // 使用我们自己定义的映射表。如果找不到，就直接使用语言代码（例如'it'）
+
+    // 使用我们自己定义的映射表
     const targetLanguage = langCodeToName[lang] || lang;
-    // --- 修复结束 ---
 
     // 4. 构建请求 Gemini API 的 URL
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apikey}`;
@@ -62,7 +60,10 @@ async function recognize(base64, lang, options) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(body)
+        // --- 错误修复部分 ---
+        // 直接传递 body 对象，不要手动 JSON.stringify()
+        body: body
+        // --- 修复结束 ---
     });
 
     // 7. 处理返回结果
