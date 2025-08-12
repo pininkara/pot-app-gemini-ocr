@@ -9,17 +9,32 @@ async function recognize(base64, lang, options) {
     if (!apikey) {
         throw "Gemini API Key not found. Please set it in the plugin configuration.";
     }
-
+    
     // 2. 如果用户没有选择模型，提供一个默认值
     if (!model) {
-        model = "gemini-1.5-flash-latest"; // 默认使用 Flash 模型
+        model = "gemini-2.5-flash"; // 默认使用 Flash 模型
     }
 
-    // 3. 获取目标语言名称
-    const targetLanguage = options.langMap[lang] || '简体中文';
+    // --- 错误修复部分 ---
+    // 在函数内部创建一个简单的语言代码 -> 名称映射表
+    const langCodeToName = {
+        "auto": "英文",
+        "zh_cn": "简体中文",
+        "zh_tw": "繁體中文",
+        "en": "英文",
+        "ja": "日文",
+        "ko": "韩文",
+        "fr": "法文",
+        "es": "西班牙文",
+        "ru": "俄文",
+        "de": "德文"
+    };
+    
+    // 使用我们自己定义的映射表。如果找不到，就直接使用语言代码（例如'it'）
+    const targetLanguage = langCodeToName[lang] || lang;
+    // --- 修复结束 ---
 
-    // 4. 构建请求 Gemini API 的 URL，现在是动态的
-    //    使用用户选择的 model 变量来构建 URL
+    // 4. 构建请求 Gemini API 的 URL
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apikey}`;
 
     // 5. 构建请求体 (Request Body)
@@ -28,7 +43,7 @@ async function recognize(base64, lang, options) {
             {
                 parts: [
                     {
-                        text: `请精确识别图中的所有文字，然后将它们翻译成“${targetLanguage}”。为了便于用户理解你可以提供一些说明信息，请不要输出markdown格式的文本。请注意，图像中的文字可能包含多种语言，请确保翻译准确。`,
+                        text: `请精确识别图中的所有文字，然后将它们翻译成“${targetLanguage}”。请只返回翻译后的纯文本，不要包含任何额外的解释、标题或 Markdown 格式。`
                     },
                     {
                         inline_data: {
